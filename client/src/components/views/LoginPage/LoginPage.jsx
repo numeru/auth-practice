@@ -12,7 +12,7 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let body = {
+    const body = {
       email: email,
       password: password,
     };
