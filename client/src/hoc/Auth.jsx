@@ -16,7 +16,7 @@ export default function (SpecificComponent, option, adminRoute = null) {
         } else if (adminRoute === true && !res.payload.isAdmin) {
           history.push("/");
         } else if (option === false) {
-          history.push("/");
+          history.push("/logout");
         }
       });
     }, []);

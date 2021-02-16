@@ -1,63 +1,57 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { registerUser } from "_action/user_action";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 const RegisterPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [confirmedPassword, setConfirmedPassword] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (password !== confirmedPassword) {
-      return alert("비밀번호와 다릅니다.");
-    }
-
-    const body = {
-      email: email,
-      name: name,
-      password: password,
-    };
-
-    dispatch(registerUser(body)).then((res) => {
-      if (res.payload.success) {
-        history.push("/login");
-      } else {
-        alert("Error");
-      }
-    });
-  };
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input
-        type="password"
-        value={confirmedPassword}
-        onChange={(e) => setConfirmedPassword(e.target.value)}
-      />
+    <>
+      <Formik
+        initialValues={{ email: "", name: "", password: "" }}
+        validationSchema={Yup.object({
+          email: Yup.string()
+            .email("Invalid email address")
+            .required("Required"),
+          name: Yup.string()
+            .max(15, "Must be 15 characters or less")
+            .required("Required"),
+          password: Yup.string()
+            .min(8, "Must be 8 characters or more")
+            .required("Required"),
+        })}
+        onSubmit={(values, { setSubmitting }) => {
+          dispatch(registerUser(values)).then((res) => {
+            if (res.payload.success) {
+              history.push("/login");
+            } else {
+              alert("Error");
+            }
+            setSubmitting(false);
+          });
+        }}
+      >
+        <Form>
+          <label htmlFor="email">Email Address</label>
+          <Field name="email" type="email" />
+          <ErrorMessage name="email" />
 
-      <button>SiGNIN</button>
-    </form>
+          <label htmlFor="name">Name</label>
+          <Field name="name" type="text" />
+          <ErrorMessage name="name" />
+
+          <label htmlFor="password">Password</label>
+          <Field name="password" type="text" />
+          <ErrorMessage name="password" />
+
+          <button type="submit">Submit</button>
+        </Form>
+      </Formik>
+      <Link to="/">Home</Link>
+    </>
   );
 };
 

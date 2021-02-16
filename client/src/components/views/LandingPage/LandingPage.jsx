@@ -1,21 +1,12 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
-import axios from "axios";
+import { Link } from "react-router-dom";
 
 const LandingPage = () => {
-  const history = useHistory();
-
-  const clickHandler = () => {
-    axios.get("/api/users/logout").then((res) => {
-      if (res.data.success) {
-        history.push("/login");
-      }
-    });
-  };
-
   return (
     <div>
-      <button onClick={clickHandler}>LOGOUT</button>
+      <Link to="/login">login</Link>
+      <br />
+      <Link to="/register">signin</Link>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { loginUser } from "_action/user_action";
 
 const LoginPage = () => {
@@ -19,26 +19,31 @@ const LoginPage = () => {
 
     dispatch(loginUser(body)).then((res) => {
       if (res.payload.loginSuccess) {
-        history.push("/");
+        history.push("/logout");
       } else {
         alert("Error");
       }
     });
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button>LOGIN</button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="email"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="password"
+        />
+        <button>LOGIN</button>
+      </form>
+      <Link to="/">Home</Link>
+    </>
   );
 };
 
